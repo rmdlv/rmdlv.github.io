@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Earth</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script type="module">
+            import * as THREE from './build/three.module.js';
+            import { OrbitControls } from './OrbitControls.js';
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			const renderer = new THREE.WebGLRenderer({antialias: true});
+            const controls = new OrbitControls( camera, renderer.domElement );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+            controls.minDistance = 1.25
+            controls.maxDistance = 3.5
+            controls.rotateSpeed = 0.25
+            controls.enableDamping = true
+            controls.enablePan = false
+			const geometry = new THREE.SphereGeometry(1, 64, 64);
+            const texture = new THREE.TextureLoader().load( 'earth.jpg' );
+			const material = new THREE.MeshBasicMaterial( { map: texture } );
+			const sphere = new THREE.Mesh( geometry, material );
+			scene.add( sphere );
+			camera.position.z = 2;
+			const animate = function () {
+				requestAnimationFrame( animate );
+				sphere.rotation.y += 0.00025;
+                controls.update();
+				renderer.render( scene, camera );
+			};
+			animate();
+		</script>
+	</body>
+</html>
