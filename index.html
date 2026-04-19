@@ -34,7 +34,9 @@
 		const sphere = new THREE.Mesh(geometry, material);
 		scene.add(sphere);
 		camera.position.z = 2;
-		sphere.rotation.y = -80 * Math.PI / 180;
+		sphere.rotation.x = 0.42;
+		sphere.rotation.y = -1.38;
+		sphere.rotation.z = 0.41;
 		const animate = function () {
 			requestAnimationFrame(animate);
 			controls.update();
