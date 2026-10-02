@@ -1,0 +1,36 @@
+Ride33 S4 / public flasher / 2026-10-02
+
+Package: 54184 bytes
+OTA SHA-256: 8a7c6ff245dde429e3be5f86198e725e454b69a6ba5d7a9beed0e9f6ba8f4d68
+Application SHA-256: 9a274d52adface13427daac8257da3544505ff6ca235425ef44f59d5b25e8f28
+Build ID: R4RD.20261002.01
+
+Provenance, checked offline:
+- The decrypted official CTRL 305 application equals the application in the original captured Flash byte-for-byte.
+- The modified image retains the official model header and vendor OTA key.
+- Personal configuration is outside the OTA application. The captured personal serial is absent from both the application and encrypted package.
+- The local console's single-device serial hash was a client restriction. This public client uses an explicit N2SR / CTRL 1.3.1 / BLE 2.1.12 policy instead.
+- Same-image hardware operation was reported successful by the owner on 2026-10-02. Other hardware revisions have not been physically tested.
+
+Firmware validation already completed:
+- 2400 Thumb cases for mode/sign/brake/regen and hook ABI/flags, plus overflow limits.
+- Whole control-loop tests for held throttle at boot, release, braking and Start0.
+- 18 matched-initial-state braking/release trajectories, 30 ticks each; original RAM behavior preserved.
+- 96 other-mode RAM comparisons and 64 target-selection cases.
+- Alarm at 35 km/h checked through the actual panel UART response code.
+- OTA receiver and bootloader copy executed in an emulator for forward and rollback paths.
+- The exact public OTA was also accepted by the original factory CTRL 305 receiver and copied by the bootloader in emulation, preserving bootloader and personal configuration.
+- The emulator substitutes Flash hardware, ADC and motor plant. These results are not a physical safety certification or a measurement of road acceleration.
+
+Stock numeric evidence:
+- N2SR Sport target 1618739 / 65536 = 24.699996948 km/h, nominal 25.
+- Panel alarm threshold 30 km/h.
+- Overspeed reaction starts above internal target + 2 km/h, about 26.7. Modified target for that comparison is 33 + 2 = 35.
+- Normal Sport command-slew parameter 32768 Q16; positive rising drive uses x4 = 131072. Unit: internal command units per control tick, not A/s or m/s^2.
+- Adaptive active speed-filter alpha is multiplied by 2 only on a positive Sport delta without brake/regen; working 40..411 Q16 becomes 80..822. Startup values are not the working acceleration coefficient.
+- Drive-start clamp originally has a 32/10 km/h lower bound. The mod honors settings below 32 for drive in riding modes while preserving shared brake/lock thresholds.
+- Speed conversion removes signed 16-bit truncation; three downstream magnitude loads use unsigned halfwords. Positive numeric field range increases from 32767 to 65535 thousandths of km/h; this is not a motor-speed claim.
+
+No stock-versus-final-road acceleration chart is supplied: a suitable recorded pair does not exist. Saved bench reference Response2 must not be labelled factory stock.
+
+The static client is tested with a simulated Bluetooth transport. No new physical connection, motor run, measurement or OTA was performed to build this site.
